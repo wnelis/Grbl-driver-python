@@ -48,7 +48,5 @@ are correct.
 
 ### Design
 
-The structure of the module is depicted in the figure below:
-
-<img src="https://raw.githubusercontent.com/wnelis/Grbl-driver-python/master/docs/grbl.driver.archictecture.png">
+The structure of the module is depicted in [a picture](docs/grbl.driver.architecture.pdf).
 
