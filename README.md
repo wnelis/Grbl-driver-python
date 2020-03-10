@@ -50,5 +50,5 @@ are correct.
 
 The structure of the module is depicted in the figure below:
 
-<img src="https://raw.githubusercontent.com/wnelis/Grbl-driver-python/master/docs/grbl.driver.archictecture.pdf">
+<img src="https://raw.githubusercontent.com/wnelis/Grbl-driver-python/master/docs/grbl.driver.archictecture.png">
 
