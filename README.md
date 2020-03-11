@@ -38,15 +38,15 @@ second part to implement is related to the check mode, using system command $C.
 If the check mode is disabled, a soft reset is performed by the Grbl device and
 thus transmission must be suspended until the welcome message is received.
 
-The description of error 8, which is "Grbl '$' command cannot be used unless
-Grbl is IDLE. Ensures smooth operation during a job", one might conclude that
-flow control method 'character counting' is not suitable for system commands, as
-a system command might be sent while the state of the Grbl device is not idle.
+From the description of error 8 (Grbl '$' command cannot be used unless Grbl is
+IDLE. Ensures smooth operation during a job), one might conclude that flow
+control method 'character counting' is not suitable for system commands, as a
+system command might be sent while the state of the Grbl device is not idle.
 Using method 'send-response', the change of hitting the idle state seems to be
 much higher or maybe even 100%. I do not know if the aforementioned conclusions
 are correct.
 
 ### Design
 
-The structure of the module is depicted in [a picture](docs/grbl.driver.architecture.pdf).
+The structure of the module is shown in [this picture](docs/grbl.driver.architecture.pdf).
 
