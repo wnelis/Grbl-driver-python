@@ -57,8 +57,8 @@
 #   disabled.
 # - System commands may only be sent if Grbl is in IDLE mode. See error code 8.
 #   Is a system command buffered while Grbl is in non-IDLE mode? Is fc-cc
-#   permissible for system commands? How to maintain the mode of Grbl with a
-#   (very) low overhead?
+#   permissible for system commands? How to track the mode of Grbl with a (very)
+#   low overhead?
 #
 import queue				# Inter thread communication
 import re				# Regular expressions
@@ -271,6 +271,13 @@ class Grbl():
       self.flwctl_type= 'sr'		# Set to the default value
 
  #
+ # Method flush returns once the write queue for g-codes and system commands is
+ # empty and the last line from the queue is written to the serial port.
+ #
+  def flush( self ):
+    self.eframe_qu_gsc.join()
+
+ #
  # Method get_statistics returns the collected statistics.
  #
   def get_statistics( self ):
@@ -283,7 +290,7 @@ class Grbl():
     try:
       self.serial= serial.Serial( port=serdev, baudrate= grblSerialBaudRate )
     except serial.SerialException as e:
-      self._log_message( "Could not open port {}: {}".format(self.serial.name,e) )
+      self._log_message( "Could not open port {}: {}".format(serdev,e) )
       self.serial= None
       return None
 
@@ -413,8 +420,8 @@ class Grbl():
   # Retrieve the next frame (line) from the internal, intermediate queue and
   # update the statistics.
       qv= self.eframe_qu_gsc.get()	# Wait for next line to write
-      if not self.wr_gsc_alive:
-        break
+      if not self.wr_gsc_alive:  break
+      if qv is None:             break
       self.eframe     = qv['Frame']
       self.eframe_type= qv['Type']
       assert self.eframe_type != 'rtcmd', 'Unexpected frame type on gsc queue.'
@@ -441,8 +448,8 @@ class Grbl():
         break
 
       self.serial.write( self.eframe )	# Finally, write frame to serial port
-      self.eframe_qu_gsc.task_done()
       self.serial.flush()		# Wait for frame to be written
+      self.eframe_qu_gsc.task_done()
 
  #
  # Method writer_rtc is started as a separate thread. It retrieves real-time
